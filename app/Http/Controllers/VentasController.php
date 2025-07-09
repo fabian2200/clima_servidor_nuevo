@@ -53,7 +53,11 @@ class VentasController extends Controller
             if ($insertado2) {
                 $emailController = new EmailController();
                 $resultado = $emailController->enviarCorreo('Activación de cuenta', $correo, $nombres.' '.$apellidos, "user_".$cedula, $clave, $pines_comprados, $precio_pin, ($pines_comprados * $precio_pin), 1111);
-                return response()->json(["¡Venta realizada correctamente!", 0], 200);
+                if($resultado == "Mensaje enviado correctamente."){
+                    return response()->json(["¡Venta realizada correctamente!", 0], 200);
+                }else{
+                    return response()->json(["¡Ocurrió un error al enviar el correo, intente nuevamente!", 1], 200);
+                }
             }else{
                 return response()->json(["¡Ocurrió un error al guardar la venta, intente nuevamente!", 1], 200);
             }

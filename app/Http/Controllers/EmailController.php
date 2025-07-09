@@ -14,16 +14,17 @@ class EmailController extends Controller
     
         try {
             $mail->isSMTP();
-            $mail->Host = 'mail.climalaborald10.com';
+            $mail->Host = 'mail.icp360rh.com';
             $mail->SMTPAuth = true;
-            $mail->Username = '_mainaccount@climalaborald10.com';
-            $mail->Password = 'Jpr~]A3OW+5T]vdL';
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
+            $mail->Username = 'clima@icp360rh.com';
+            $mail->Password = 'clima2025@';
+            $mail->SMTPSecure = 'ssl'; // CAMBIADO de 'tls' a 'ssl'
+            $mail->Port = 465;         // CAMBIADO de 587 a 465
             
-            $mail->setFrom('_mainaccount@climalaborald10.com', 'Instituto Colombiano de Psicometria');
-            $mail->addAddress($email, $nombres_apellidos);
-    
+            $mail->setFrom('clima@icp360rh.com', 'Instituto Colombiano de Psicometria');
+            $mail->addAddress($email);
+            $mail->SMTPKeepAlive = true;  
+            $mail->Mailer = "smtp"; 
             $mail->isHTML(true);
             $subject = $asunto.' - ICP';
             $encoded_subject = mb_encode_mimeheader($subject, 'UTF-8');
@@ -55,9 +56,12 @@ class EmailController extends Controller
                     $mail->Body = self::mapearPlantilla4($email, $nombres_apellidos, $usuario, $password, $pines, $precio, $total, $orden);
                     break;
             }
-    
-            $mail->send();
-            return "Correo enviado correctamente!";
+        
+            if ($mail->send()) {
+                return "Mensaje enviado correctamente.";
+            } else {
+                return "Error al enviar: " . $mail->ErrorInfo;
+            }
         } catch (Exception $e) {
             return "Hubo un error al enviar el correo: {$mail->ErrorInfo}";
         }
@@ -266,7 +270,7 @@ class EmailController extends Controller
                     <hr>
                     <p style='font-weight: bold; margin: 4px;'>Su usuario es: $usuario</p>
                     <p style='font-weight: bold; margin: 4px;'>Su clave es: $password</p>
-                    <p style='font-weight: bold; margin: 4px;'>El enlace de inicio es: https://evaluacion.climalaborald10.com/</p>
+                    <p style='font-weight: bold; margin: 4px;'>El enlace de inicio es: https://climalaboral.icp360rh.com/</p>
                     <br>
                     <h4>Resumen de su compra</h4>
                     <br>
@@ -758,18 +762,21 @@ class EmailController extends Controller
         $mail = new PHPMailer(true);
     
         try {
-            $mail->isSMTP();
-            $mail->Host = 'mail.climalaborald10.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = '_mainaccount@climalaborald10.com';
-            $mail->Password = 'Jpr~]A3OW+5T]vdL';
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
             
-            $mail->setFrom('_mainaccount@climalaborald10.com', 'Instituto Colombiano de Psicometria');
-            $mail->addAddress($email, $nombres_apellidos);
-    
+            $mail->isSMTP();
+            $mail->Host = 'mail.icp360rh.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'clima@icp360rh.com';
+            $mail->Password = 'clima2025@';
+            $mail->SMTPSecure = 'ssl'; // CAMBIADO de 'tls' a 'ssl'
+            $mail->Port = 465;         // CAMBIADO de 587 a 465
+            
+            $mail->setFrom('clima@icp360rh.com', 'Instituto Colombiano de Psicometria');
+            $mail->addAddress($email);
+            $mail->SMTPKeepAlive = true;  
+            $mail->Mailer = "smtp"; 
             $mail->isHTML(true);
+            
             $subject = 'Recuperación de clave de acceso - ICP';
             $encoded_subject = mb_encode_mimeheader($subject, 'UTF-8');
             $mail->Subject = $encoded_subject;
@@ -1214,7 +1221,7 @@ class EmailController extends Controller
                      <br>
                      <h4 style='text-align:justify;'>para conocer los detalles de su pago, por favor ingrese al siguiente link:</h4>
                      <br><br>
-                     <a class='btn-enlace' href='https://climalaborald10.com/estado-pago?payment_id=$orden'>Detalle del pago</a>
+                     <a class='btn-enlace' href='https://lclima.icp360rh.com/estado-pago?payment_id=$orden'>Detalle del pago</a>
                      <br><br>
                      <h4 style='text-align:justify;'>Si tiene alguna duda, por favor contáctenos.</h4>
                      <br>
